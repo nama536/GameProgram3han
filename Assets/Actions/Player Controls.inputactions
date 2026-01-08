@@ -6,9 +6,18 @@
             "id": "54dcf7d3-0702-4a03-9933-fcc224e4fce0",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Dice",
                     "type": "Button",
                     "id": "ec2e9d42-1ca2-4e24-91af-2828dc6306a7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SixDice",
+                    "type": "Button",
+                    "id": "88a3e5ed-1150-42c4-b01a-b8ba955292f3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -19,11 +28,44 @@
                 {
                     "name": "",
                     "id": "41b403e9-78f9-4b13-b35d-ecb079cac021",
-                    "path": "",
+                    "path": "<Keyboard>/m",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Dice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b2b55593-fd59-4e7d-9063-48ac81063f5d",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75704463-b6dc-4c76-a185-b10ef416509f",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SixDice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "65f8206c-0c3f-46cd-ad92-acbeecdf0630",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SixDice",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
