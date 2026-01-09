@@ -5,34 +5,36 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _diceNumberText;
+    [SerializeField] TextMeshProUGUI _playerMoveSpaceCountText;
 
     [SerializeField] Transform[] _spaces;
 
-    public IEnumerator MovePlayer(int playerPosition, int diceNumber, PlayerPlaceManager.PlayerNumber playerNumber)
+    public IEnumerator MovePlayer(int playerPosition, int moveSpaceCount, PlayerPlaceManager.PlayerNumber playerNumber)
     {
-        _diceNumberText.enabled = true;
+        _playerMoveSpaceCountText.enabled = true;
 
-        Debug.Log(diceNumber);
-        _diceNumberText.text = diceNumber.ToString();
+        Debug.Log(moveSpaceCount);
+        _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
 
         yield return new WaitForSeconds(1f);
         //残りの動くマス数が0じゃ無い限り
-        while (diceNumber != 0)
+        while (moveSpaceCount != 0)
         {
-            if(diceNumber > 0)
+            if(moveSpaceCount > 0)
             {
-                diceNumber--;
-                _diceNumberText.text = diceNumber.ToString();
+                moveSpaceCount--;
+                _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
             }
-            else if(diceNumber < 0)
+            else if(moveSpaceCount < 0)
             {
-                diceNumber++;
-                _diceNumberText.text = diceNumber.ToString();
+                moveSpaceCount++;
+                _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
             }
+
+            yield return new WaitForSeconds(1f);
         }
 
-         yield return new WaitForSeconds(1f);
+        _playerMoveSpaceCountText.enabled = false;
     }
 
     //現在のマスがイベントマスかチェック
