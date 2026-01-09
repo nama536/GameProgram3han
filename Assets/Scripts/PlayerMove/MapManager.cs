@@ -13,7 +13,7 @@ public class MapManager : MonoBehaviour
     //プレイヤーが動いてる時に上に出るあと何マス進むかのテキスト
     [SerializeField] TextMeshProUGUI _playerMoveSpaceCountText;
     //プレイヤーの動きの処理用
-    float _offset = 0.3f;
+    float _offset = 0.2f;
     float _movePresent = 0f;
     bool _doDefaultPosition = true;
     //マスの位置0~30
