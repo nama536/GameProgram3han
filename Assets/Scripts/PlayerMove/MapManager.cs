@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
     //プレイヤーのオブジェクト
+    [SerializeField] GameObject _player;
+    //プレイヤーの見た目
+    [SerializeField] Sprite[] _playerSprites;
+    //生成されたプレイヤー　0がプレイヤー1　1がプレイヤー2
     [SerializeField] GameObject[] _players;
+    
     //マップ上のプレイヤーの位置
     int[] _playerPositions = new int[2];
     //プレイヤーが動いてる時に上に出るあと何マス進むかのテキスト
@@ -25,6 +29,21 @@ public class MapManager : MonoBehaviour
     public bool Processing = false;
 
     [SerializeField] TurnManager _turnManager;
+
+    void Start()
+    {
+        //プレイヤーを2人生成
+        _players[0] = Instantiate(_player,_spaces[0].position,Quaternion.identity);
+        _players[1] = Instantiate(_player,_spaces[0].position,Quaternion.identity);
+
+        //プレイヤーの見た目変更
+        SpriteRenderer spriteRendererP1 = _players[0].GetComponent<SpriteRenderer>();
+        spriteRendererP1.sprite = _playerSprites[0];
+        SpriteRenderer spriteRendererP2 = _players[1].GetComponent<SpriteRenderer>();
+        spriteRendererP2.sprite = _playerSprites[1];
+
+        
+    }
 
     void Update()
     {
@@ -83,7 +102,7 @@ public class MapManager : MonoBehaviour
                 if (nowMoobing)
                 {
                     _movePresent = 0f;
-                    SameSpace(_nowTurn);
+                    SameSpace();
                     nowMoobing = false;
                 }
 
@@ -116,7 +135,7 @@ public class MapManager : MonoBehaviour
                 if (nowMoobing)
                 {
                     _movePresent = 0f;
-                    SameSpace(_nowTurn);
+                    SameSpace();
                     nowMoobing = false;
                 }
 
@@ -127,11 +146,11 @@ public class MapManager : MonoBehaviour
         //残りの進むマス数の表示を消す
         _playerMoveSpaceCountText.enabled = false;
 
-        SpaceCheck(_nowTurn);
+        SpaceCheck();
     }
 
     //プレイヤーが同じ場所にいた時
-    void SameSpace(int nowTurn)
+    void SameSpace()
     {
         //プレイヤー1と2が同じ場所にいたら
         if(_playerPositions[0] == _playerPositions[1])
@@ -146,7 +165,7 @@ public class MapManager : MonoBehaviour
         else if(!_doDefaultPosition)
         {
             //今動いていない方の位置を戻す
-            switch (nowTurn)
+            switch (_nowTurn)
             {
                 case 0:
                     _players[1].transform.position -= new Vector3(_offset,0f,0f);
@@ -161,9 +180,9 @@ public class MapManager : MonoBehaviour
     }
 
     //現在のマスがイベントマスかチェック
-    void SpaceCheck(int nowTurn)
+    void SpaceCheck()
     {
-        switch (_playerPositions[nowTurn])
+        switch (_playerPositions[_nowTurn])
         {
             //3進むイベントマスに止まったら
             case 6:
@@ -187,7 +206,7 @@ public class MapManager : MonoBehaviour
                 break;
             //ゴールマスに止まったら
             case 30:
-                Debug.Log("プレイヤー" + (nowTurn + 1) + "の勝利");
+                Debug.Log("プレイヤー" + (_nowTurn + 1) + "の勝利");
                 break;
             //その他通常マスに止まったら
             default:
