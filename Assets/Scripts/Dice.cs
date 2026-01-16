@@ -1,131 +1,110 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using System;
+using System.Collections;
 
 public class Dice : MonoBehaviour
-{   
-    private int dicevalue;
-    private int sixdicevalue;
+{
+    [Header("表示用のスプライトレンダラー")]
+    public SpriteRenderer targetSpriteRenderer; 
 
-    public Sprite newSprite; // インスペクターで設定するスプライト
-    private SpriteRenderer spriteRenderer;
+    [Header("--- 普通のサイコロ設定 ---")]
+    public Sprite[] normalShuffleSprites; // シャッフル中に表示する画像(1~6など)
+    public Sprite[] normalResultSprites;  // 1~6の確定用画像
 
-    //サイコロの出目画像
-    public Sprite one; // 1
-    public Sprite two; // 2
-    public Sprite three; // 3
-    public Sprite four; // 4
-    public Sprite five; // 5
-    public Sprite six; // 6
+    [Header("--- ハイリスクサイコロ設定 ---")]
+    public Sprite[] riskShuffleSprites;  // シャッフル中に表示する画像(-1~-4, 6など)
+    // 確定時の個別画像
+    public Sprite riskMinus1;
+    public Sprite riskMinus2;
+    public Sprite risk3;
+    public Sprite riskMinus4;
+    public Sprite risk6;
 
-    
-    public Sprite Riskone; // -1
-    public Sprite Risktwo; // -2
-    public Sprite Riskthree; // 3
-    public Sprite Riskfour; // -4
-    public Sprite Risksix; // 6
-    //-------------------------------------
-     void Start()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>(); // SpriteRendererコンポーネントを取得
-        if (newSprite != null)
-        {
-            spriteRenderer.sprite = newSprite; // スプライトを割り当てて表示
-        }
-    }
+    [Header("共通演出設定")]
+    public float shuffleDuration = 1.0f; 
+    public float shuffleInterval = 0.1f; 
 
-    void Update()
-    {
-        
-    }
-    //普通のサイコロ
+    private bool isRolling = false; 
+
+    [SerializeField] TurnManager turnManager; // インスペクターでTurnManagerをセット
+
+    // ==========================================
+    // 普通のサイコロ (1〜6)
+    // ==========================================
     private void OnDice(InputValue input)
     {
-        //均等なダイス（1から最大値−１の間で生成）
-        dicevalue = UnityEngine.Random.Range(1,7);
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        if (turnManager.hasRolled || isRolling || mapManager.Processing) return;
 
-        if(dicevalue == 1)
-        {
-            spriteRenderer.sprite == one;
-        }
-
-        else if(dicevalue == 2)
-        {
-            spriteRenderer.sprite == two;
-        }
-
-        else if(dicevalue == 3)
-        {
-            spriteRenderer.sprite == three;
-        }
-
-        else if(dicevalue == 4)
-        {
-            spriteRenderer.sprite == four;
-        }
-
-        else if(dicevalue == 5)
-        {
-            spriteRenderer.sprite == five;
-        }
-
-        else if(dicevalue == 6)
-        {
-            spriteRenderer.sprite == six;
-        }
-
-        Debug.Log(dicevalue);
+        turnManager.hasRolled = true; // 振ったことにする
+        
+        int resultIndex = UnityEngine.Random.Range(0, 6); // 0~5のインデックス
+        Sprite finalSprite = normalResultSprites[resultIndex];
+        
+        StartCoroutine(NormalShuffleRoutine(finalSprite, resultIndex + 1));
     }
-//-----------------------------------------------------------
 
-    //ハイリスクのサイコロ
+    IEnumerator NormalShuffleRoutine(Sprite finalSprite, int value)
+    {
+        isRolling = true;
+        float elapsed = 0f;
+
+        while (elapsed < shuffleDuration)
+        {
+            // 普通のサイコロ用画像群からランダム表示
+            targetSpriteRenderer.sprite = normalShuffleSprites[UnityEngine.Random.Range(0, normalShuffleSprites.Length)];
+            elapsed += shuffleInterval;
+            yield return new WaitForSeconds(shuffleInterval);
+        }
+
+        targetSpriteRenderer.sprite = finalSprite;
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        StartCoroutine(mapManager.MovePlayer(value)); 
+        Debug.Log($"普通ダイス確定: {value}");
+        isRolling = false;
+    }
+    //-------------------------------------------------------------------------------
+
+    // ==========================================
+    // ハイリスクサイコロ (-1, -2, -4, 3, 6)
+    // ==========================================
     private void OnSixDice(InputValue input)
     {
-        sixdicevalue = UnityEngine.Random.Range(1,7);
-        Select();
+        if (turnManager.hasRolled || isRolling) return;
+        turnManager.hasRolled = true; // 振ったことにする
+
+        // 確率計算
+        int roll = UnityEngine.Random.Range(1, 7);
+        int resultValue;
+        Sprite finalSprite;
+
+        if (roll == 1) { resultValue = -1; finalSprite = riskMinus1; }
+        else if (roll == 2) { resultValue = 3;  finalSprite = risk3; }
+        else if (roll == 3) { resultValue = -2; finalSprite = riskMinus2; }
+        else if (roll == 4) { resultValue = 6;  finalSprite = risk6; }
+        else if (roll == 5) { resultValue = -4; finalSprite = riskMinus4; }
+        else { resultValue = 6; finalSprite = risk6; }
+
+        StartCoroutine(RiskShuffleRoutine(finalSprite, resultValue));
     }
 
-    //100分率に変換してサイコロの出目を調整
-    void Select()
+    IEnumerator RiskShuffleRoutine(Sprite finalSprite, int value)
     {
-        //1/100
-        if(sixdicevalue <= 1) //乱数で出てきた値が10以下なら 1 と判断
-        {
-            View(-1);
-        }
-        //1/100
-        else if(sixdicevalue <= 2) //乱数で出てきた値が20以下 2 と判断
-        {
-            View(3);
-        }
-        //1/100
-        else if(sixdicevalue <= 3) //乱数で出てきた値が30以下なら 3 と判断
-        {
-            View(-2);
-        }
-        //1/100
-        else if(sixdicevalue <= 4) //乱数で出てきた値が40以下なら 4 と判断
-        {
-            View(6);
-        }
-        //1/100
-        else if(sixdicevalue <= 5) //乱数で出てきた値が50以下なら 5 と判断
-        {
-            View(-4);
-        }
-        //95/100
-        else//乱数で出てきた値がその他(51以上)なら 6 と判断
-        {
-            View(6);
-        }
-    }
+        isRolling = true;
+        float elapsed = 0f;
 
-        //結果の表示
-    void View(int sixdicevalue)
-    {
-        Debug.Log($"ダイスで{sixdicevalue}が出た!");
+        while (elapsed < shuffleDuration)
+        {
+            // ハイリスク専用画像群（マイナス値など）からランダム表示
+            targetSpriteRenderer.sprite = riskShuffleSprites[UnityEngine.Random.Range(0, riskShuffleSprites.Length)];
+            elapsed += shuffleInterval;
+            yield return new WaitForSeconds(shuffleInterval);
+        }
+
+        targetSpriteRenderer.sprite = finalSprite;
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        StartCoroutine(mapManager.MovePlayer(value));
+        Debug.Log($"ハイリスク確定: {value}");
+        isRolling = false;
     }
 }

@@ -17,9 +17,11 @@ public class TurnManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _turnText;
 
     [SerializeField] MapManager _mapManager;
+    public bool hasRolled = false;
 
     public void TurnChange()
     {
+        hasRolled = false;
         //今と逆のプレイヤーにターンを変更
         switch (NowTurn)
         {

@@ -46,14 +46,14 @@ public class MapManager : MonoBehaviour
         SameSpace();
     }
 
-    void Update()
+    /*void Update()
     {
         //テスト用
-        if (!Processing)
+       if (!Processing)
         {
             StartCoroutine(MovePlayer(5));
         }
-    }
+    }*/
 
     //ダイスが振られたら(ダイスの目)
     public IEnumerator MovePlayer(int moveSpaceCount)
