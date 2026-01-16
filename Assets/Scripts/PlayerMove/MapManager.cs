@@ -29,6 +29,7 @@ public class MapManager : MonoBehaviour
     public bool Processing = false;
 
     [SerializeField] TurnManager _turnManager;
+    [SerializeField] ResultManager _resultManager;
 
     void Start()
     {
@@ -74,6 +75,15 @@ public class MapManager : MonoBehaviour
         //プレイヤーが動いてる時に上に出るあと何マス進むかのテキストを表示
         _playerMoveSpaceCountText.enabled = true;
         _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
+        switch (_nowTurn)
+        {
+            case 0:
+                _playerMoveSpaceCountText.color = Color.black;
+                break;
+            case 1:
+                _playerMoveSpaceCountText.color = Color.blue;
+                break;
+        }
 
         yield return new WaitForSeconds(1f);
 
@@ -207,6 +217,7 @@ public class MapManager : MonoBehaviour
             //ゴールマスに止まったら
             case 30:
                 Debug.Log("プレイヤー" + (_nowTurn + 1) + "の勝利");
+                StartCoroutine(_resultManager.DoResult(_nowTurn));
                 break;
             //その他通常マスに止まったら
             default:
