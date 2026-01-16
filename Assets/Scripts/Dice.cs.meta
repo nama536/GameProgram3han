@@ -3,7 +3,13 @@ guid: f1b718c5aa6fc42379a62720c2796488
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - targetSpriteRenderer: {instanceID: 0}
+  - riskMinus1: {fileID: 21300000, guid: d569361df5f984b63b17a0af97e1b441, type: 3}
+  - riskMinus2: {fileID: 21300000, guid: ca2f47f71337d463082e29d34c79b280, type: 3}
+  - risk3: {fileID: 21300000, guid: 7811e838bb8864bffab831f08ea55aa3, type: 3}
+  - riskMinus4: {fileID: 21300000, guid: da886d282a8c745feb4ea8be3a6ee1ae, type: 3}
+  - risk6: {fileID: 21300000, guid: 25c2f783dd1324ef7ad4eba1feb10ce4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
