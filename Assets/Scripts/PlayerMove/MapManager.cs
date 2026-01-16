@@ -42,7 +42,7 @@ public class MapManager : MonoBehaviour
         SpriteRenderer spriteRendererP2 = _players[1].GetComponent<SpriteRenderer>();
         spriteRendererP2.sprite = _playerSprites[1];
 
-        
+        SameSpace();
     }
 
     void Update()
