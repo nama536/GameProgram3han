@@ -31,7 +31,7 @@ public class Dice : MonoBehaviour
     // ==========================================
     // 普通のサイコロ (1〜6)
     // ==========================================
-    public void OnDice()
+    public void OnDice(PlayerManager.Event thisEvent)
     {
         MapManager mapManager = FindObjectOfType<MapManager>();
         if (turnManager.hasRolled || isRolling || mapManager.Processing) return;
@@ -68,7 +68,7 @@ public class Dice : MonoBehaviour
     // ==========================================
     // ハイリスクサイコロ (-1, -2, -4, 3, 6)
     // ==========================================
-    public void OnSixDice()
+    public void OnSixDice(PlayerManager.Event thisEvent)
     {
         if (turnManager.hasRolled || isRolling) return;
         turnManager.hasRolled = true; // 振ったことにする
