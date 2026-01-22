@@ -32,6 +32,7 @@ public class MapManager : MonoBehaviour
 
     [SerializeField] TurnManager _turnManager;
     [SerializeField] ResultManager _resultManager;
+    private PlayerManager[] _playermanager = new PlayerManager[2];
     
 
     void Start()
@@ -39,13 +40,13 @@ public class MapManager : MonoBehaviour
         //プレイヤーを2人生成
         _players[0] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[0].PlayerDevice);
         _players[0].gameObject.transform.position = _spaces[0].position;
-        PlayerManager playeronemanager = _players[0].GetComponent<PlayerManager>();
-        playeronemanager.thisPlayerCount = PlayerManager.PlayerCount.PlayerOne;
+        _playermanager[0] = _players[0].GetComponent<PlayerManager>();
+        _playermanager[0].thisPlayerCount = PlayerManager.PlayerCount.PlayerOne;
 
         _players[1] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[1].PlayerDevice);
         _players[1].gameObject.transform.position = _spaces[0].position;
-        PlayerManager playertwomanager = _players[1].GetComponent<PlayerManager>();
-        playertwomanager.thisPlayerCount = PlayerManager.PlayerCount.PlayerTwo;
+        _playermanager[1] = _players[1].GetComponent<PlayerManager>();
+        _playermanager[1].thisPlayerCount = PlayerManager.PlayerCount.PlayerTwo;
 
 
         //プレイヤーの見た目変更
@@ -214,16 +215,24 @@ public class MapManager : MonoBehaviour
                 StartCoroutine(MovePlayer(3));
                 Debug.Log("3進むマス");
                 break;
-            //次ターン確定で2の目になるイベントマスに止まったら
+            //次ターン確定でハイリスクのサイコロになるイベントマスに止まったら
             case 12:
             case 20:
                 _turnManager.TurnChange();
                 Debug.Log("次ターン確定で2の目になるマス");
+                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.sixDice;
                 break;
             //次ターンから1の目を出すまでターンが回ってこないイベントマスに止まったら
             case 15:
                 _turnManager.TurnChange();
                 Debug.Log("次ターンから1の目を出すまでターンが回ってこないマス");
+                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.stopDice;
+                break;
+            //次ターン hitotumaenosaikoronikotei
+            case 19:
+                _turnManager.TurnChange();
+                Debug.Log("次一つ前のサイコロに固定");
+                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.beforeDice;
                 break;
             //ゴールマスに止まったら
             case 30:
@@ -233,6 +242,7 @@ public class MapManager : MonoBehaviour
             //その他通常マスに止まったら
             default:
                 _turnManager.TurnChange();
+                 _playermanager[_nowTurn].thisEvent = PlayerManager.Event.normalDice;
                 break;
         }
     }
