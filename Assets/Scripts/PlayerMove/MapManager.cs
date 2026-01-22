@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MapManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class MapManager : MonoBehaviour
     //プレイヤーの見た目
     [SerializeField] Sprite[] _playerSprites;
     //生成されたプレイヤー　0がプレイヤー1　1がプレイヤー2
-    [SerializeField] GameObject[] _players;
+    [SerializeField] PlayerInput[] _players;
     
     //マップ上のプレイヤーの位置
     int[] _playerPositions = new int[2];
@@ -27,15 +28,25 @@ public class MapManager : MonoBehaviour
     int _nowTurn;
     //処理中かどうか
     public bool Processing = false;
+    public TitleManager[] PlayerDataManagers;
 
     [SerializeField] TurnManager _turnManager;
     [SerializeField] ResultManager _resultManager;
+    
 
     void Start()
     {
         //プレイヤーを2人生成
-        _players[0] = Instantiate(_player,_spaces[0].position,Quaternion.identity);
-        _players[1] = Instantiate(_player,_spaces[0].position,Quaternion.identity);
+        _players[0] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[0].PlayerDevice);
+        _players[0].gameObject.transform.position = _spaces[0].position;
+        PlayerManager playeronemanager = _players[0].GetComponent<PlayerManager>();
+        playeronemanager.thisPlayerCount = PlayerManager.PlayerCount.PlayerOne;
+
+        _players[1] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[1].PlayerDevice);
+        _players[1].gameObject.transform.position = _spaces[0].position;
+        PlayerManager playertwomanager = _players[1].GetComponent<PlayerManager>();
+        playertwomanager.thisPlayerCount = PlayerManager.PlayerCount.PlayerTwo;
+
 
         //プレイヤーの見た目変更
         SpriteRenderer spriteRendererP1 = _players[0].GetComponent<SpriteRenderer>();
