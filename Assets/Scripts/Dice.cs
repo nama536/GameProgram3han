@@ -41,10 +41,10 @@ public class Dice : MonoBehaviour
         int resultIndex = UnityEngine.Random.Range(0, 6); // 0~5のインデックス
         Sprite finalSprite = normalResultSprites[resultIndex];
         
-        StartCoroutine(NormalShuffleRoutine(finalSprite, resultIndex + 1));
+        StartCoroutine(NormalShuffleRoutine(finalSprite, resultIndex + 1, thisEvent));
     }
 
-    IEnumerator NormalShuffleRoutine(Sprite finalSprite, int value)
+    IEnumerator NormalShuffleRoutine(Sprite finalSprite, int value, PlayerManager.Event thisEvent)
     {
         isRolling = true;
         float elapsed = 0f;
@@ -59,9 +59,24 @@ public class Dice : MonoBehaviour
 
         targetSpriteRenderer.sprite = finalSprite;
         MapManager mapManager = FindObjectOfType<MapManager>();
-        StartCoroutine(mapManager.MovePlayer(value)); 
+
+        //もし"1以外だと動けないイベント"中で1以外を出したら
+        if(thisEvent == PlayerManager.Event.stopDice && value != 1)
+        {
+            Invoke("TurnChange",1f);//1秒後にターンチェンジ
+        }
+        else//それ以外なら普通に動かす
+        {
+            StartCoroutine(mapManager.MovePlayer(value)); 
+        }
+
         Debug.Log($"普通ダイス確定: {value}");
         isRolling = false;
+    }
+
+    void TurnChange()
+    {
+        turnManager.TurnChange();
     }
     //-------------------------------------------------------------------------------
 

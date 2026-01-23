@@ -25,38 +25,32 @@ public class PlayerManager : MonoBehaviour
     private TurnManager turnManager; 
     private Dice diceManager;
 
-    // Start is called before the first frame update
     void Start()
     {
         diceManager = FindFirstObjectByType<Dice>();
         turnManager = FindFirstObjectByType<TurnManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void OnDice(InputValue input)
     {
         if(thisPlayerCount == PlayerCount.PlayerOne && turnManager.NowTurn == TurnManager.Turn.PlayerOne)
         {
-        diceManager.OnDice(thisEvent);
+            diceManager.OnDice(thisEvent);
         }
         else if(thisPlayerCount == PlayerCount.PlayerTwo && turnManager.NowTurn == TurnManager.Turn.PlayerTwo)
         {
-        diceManager.OnDice(thisEvent);
+            diceManager.OnDice(thisEvent);
         }
     }
     public void OnSixDice(InputValue input)
     {
         if(thisPlayerCount == PlayerCount.PlayerOne && turnManager.NowTurn == TurnManager.Turn.PlayerOne)
         {
-        diceManager.OnSixDice(thisEvent);
+            diceManager.OnSixDice(thisEvent);
         }
         else if(thisPlayerCount == PlayerCount.PlayerTwo && turnManager.NowTurn == TurnManager.Turn.PlayerTwo)
         {
-        diceManager.OnSixDice(thisEvent);
+            diceManager.OnSixDice(thisEvent);
         }
     }
 }
