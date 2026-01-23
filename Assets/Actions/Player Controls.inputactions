@@ -116,7 +116,7 @@
             "id": "fc90a427-fd4e-4bbd-aec4-372f95c33cc6",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Click",
                     "type": "Button",
                     "id": "1c797723-2777-4063-a3a5-41b76adb124e",
                     "expectedControlType": "",
@@ -129,11 +129,11 @@
                 {
                     "name": "",
                     "id": "7ecbb5eb-990e-4033-8b07-1b7118310d7f",
-                    "path": "",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

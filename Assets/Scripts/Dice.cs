@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Dice : MonoBehaviour
 {
@@ -27,11 +29,32 @@ public class Dice : MonoBehaviour
     private bool isRolling = false; 
 
     [SerializeField] TurnManager turnManager; // インスペクターでTurnManagerをセット
+    [SerializeField] private Button startButton;
+    public void Start()
+    {
+        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+    }
+    public void OnnomaleButtonClick()
+    {
+        OnDice();
+        if(turnManager.DiceMenu != null)
+        {
+            turnManager.DiceMenu.SetActive(false);
+        }
+    }
+    public void OnsixDiceButtonClick()
+    {
+        OnSixDice();
+        if(turnManager.DiceMenu != null)
+        {
+            turnManager.DiceMenu.SetActive(false);
+        }
+    }
 
     // ==========================================
     // 普通のサイコロ (1〜6)
     // ==========================================
-    public void OnDice(PlayerManager.Event thisEvent)
+    public void OnDice(PlayerManager.Event thisEvent = default)
     {
         MapManager mapManager = FindObjectOfType<MapManager>();
         if (turnManager.hasRolled || isRolling || mapManager.Processing) return;
@@ -68,7 +91,7 @@ public class Dice : MonoBehaviour
     // ==========================================
     // ハイリスクサイコロ (-1, -2, -4, 3, 6)
     // ==========================================
-    public void OnSixDice(PlayerManager.Event thisEvent)
+    public void OnSixDice(PlayerManager.Event thisEvent = default)
     {
         if (turnManager.hasRolled || isRolling) return;
         turnManager.hasRolled = true; // 振ったことにする
