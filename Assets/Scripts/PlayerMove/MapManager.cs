@@ -219,7 +219,7 @@ public class MapManager : MonoBehaviour
             case 12:
             case 20:
                 _turnManager.TurnChange();
-                Debug.Log("次ターン確定で2の目になるマス");
+                Debug.Log("次ターン確定でハイリスクのサイコロになるマス");
                 _playermanager[_nowTurn].thisEvent = PlayerManager.Event.sixDice;
                 break;
             //次ターンから1の目を出すまでターンが回ってこないイベントマスに止まったら

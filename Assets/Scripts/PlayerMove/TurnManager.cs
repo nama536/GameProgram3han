@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class TurnManager : MonoBehaviour
     }
     //今がどちらのターンなのか
     public Turn NowTurn;
+    public GameObject DiceMenu;
 
     [SerializeField] TextMeshProUGUI _turnText;
 
@@ -21,10 +23,11 @@ public class TurnManager : MonoBehaviour
 
     public void TurnChange()
     {
+        DiceMenu.SetActive(false);
         hasRolled = false;
         //今と逆のプレイヤーにターンを変更
         switch (NowTurn)
-        {
+        {  
             case Turn.PlayerOne:
                 NowTurn = Turn.PlayerTwo;
                 _turnText.text = "プレイヤー２のターン";
@@ -36,7 +39,10 @@ public class TurnManager : MonoBehaviour
                 _turnText.color = Color.black;
                 break;
         }
+        DiceMenu.SetActive(true); 
 
         _mapManager.Processing = false;//テスト用
+        GameObject firstButton = DiceMenu.GetComponentInChildren<Button>().gameObject;
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(firstButton);
     }
 }
