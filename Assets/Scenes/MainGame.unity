@@ -459,17 +459,17 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_PointAction: {fileID: 6405212482359831737, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_MoveAction: {fileID: 407805443618210056, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_SubmitAction: {fileID: -2457950987993357874, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_CancelAction: {fileID: 3264478637688416048, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_LeftClickAction: {fileID: 4967850701427359361, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_MiddleClickAction: {fileID: 8142879853651128692, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_RightClickAction: {fileID: 8176652307658793730, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_ScrollWheelAction: {fileID: 3580167692402228688, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 894196595702686130, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: -1870750598696745270, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
@@ -1310,6 +1310,7 @@ GameObject:
   - component: {fileID: 1005517456}
   - component: {fileID: 1005517460}
   - component: {fileID: 1005517461}
+  - component: {fileID: 1005517462}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1332,6 +1333,7 @@ MonoBehaviour:
   NowTurn: 0
   DiceMenu: {fileID: 882464451}
   _turnText: {fileID: 945622969}
+  _uiAction: {fileID: 1005517462}
   _mapManager: {fileID: 1005517458}
   hasRolled: 0
 --- !u!114 &1005517458
@@ -1350,7 +1352,7 @@ MonoBehaviour:
   _playerSprites:
   - {fileID: 21300000, guid: c3948c68e2844434592119d2652a61ce, type: 3}
   - {fileID: 21300000, guid: 9a8bb71cc3e1b4c2cb43b4957dcf1983, type: 3}
-  _players:
+  Players:
   - {fileID: 0}
   - {fileID: 0}
   _playerMoveSpaceCountText: {fileID: 359231968}
@@ -1467,6 +1469,36 @@ MonoBehaviour:
   shuffleInterval: 0.1
   turnManager: {fileID: 1005517456}
   startButton: {fileID: 315428653}
+--- !u!114 &1005517462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005517455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1087219027
 GameObject:
   m_ObjectHideFlags: 0

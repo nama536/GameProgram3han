@@ -21,7 +21,6 @@ public class PlayerManager : MonoBehaviour
     }
     public PlayerCount thisPlayerCount;
 
-    [SerializeField] PlayerInput _playerinput;
     private TurnManager turnManager; 
     private Dice diceManager;
 

@@ -11,7 +11,8 @@ public class MapManager : MonoBehaviour
     //プレイヤーの見た目
     [SerializeField] Sprite[] _playerSprites;
     //生成されたプレイヤー　0がプレイヤー1　1がプレイヤー2
-    [SerializeField] PlayerInput[] _players;
+    //public PlayerInput[] Players;
+    public GameObject[] Players;
     
     //マップ上のプレイヤーの位置
     int[] _playerPositions = new int[2];
@@ -38,34 +39,27 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         //プレイヤーを2人生成
-        _players[0] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[0].PlayerDevice);
-        _players[0].gameObject.transform.position = _spaces[0].position;
-        _playermanager[0] = _players[0].GetComponent<PlayerManager>();
+        //Players[0] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[0].PlayerDevice);
+        //Players[0].gameObject.transform.position = _spaces[0].position;
+        Players[0] = Instantiate(_player,_spaces[0].transform.position,Quaternion.identity);
+        _playermanager[0] = Players[0].GetComponent<PlayerManager>();
         _playermanager[0].thisPlayerCount = PlayerManager.PlayerCount.PlayerOne;
 
-        _players[1] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[1].PlayerDevice);
-        _players[1].gameObject.transform.position = _spaces[0].position;
-        _playermanager[1] = _players[1].GetComponent<PlayerManager>();
+        //Players[1] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[1].PlayerDevice);
+        //Players[1].gameObject.transform.position = _spaces[0].position;
+        Players[1] = Instantiate(_player,_spaces[0].transform.position,Quaternion.identity);
+        _playermanager[1] = Players[1].GetComponent<PlayerManager>();
         _playermanager[1].thisPlayerCount = PlayerManager.PlayerCount.PlayerTwo;
 
 
         //プレイヤーの見た目変更
-        SpriteRenderer spriteRendererP1 = _players[0].GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRendererP1 = Players[0].GetComponent<SpriteRenderer>();
         spriteRendererP1.sprite = _playerSprites[0];
-        SpriteRenderer spriteRendererP2 = _players[1].GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRendererP2 = Players[1].GetComponent<SpriteRenderer>();
         spriteRendererP2.sprite = _playerSprites[1];
 
         SameSpace();
     }
-
-    /*void Update()
-    {
-        //テスト用
-       if (!Processing)
-        {
-            StartCoroutine(MovePlayer(5));
-        }
-    }*/
 
     //ダイスが振られたら(ダイスの目)
     public IEnumerator MovePlayer(int moveSpaceCount)
@@ -110,14 +104,14 @@ public class MapManager : MonoBehaviour
                 _playerPositions[_nowTurn]++;
                 _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
 
-                Transform nowPlayerTransform = _players[_nowTurn].transform;//今のプレイヤーの位置保存
+                Transform nowPlayerTransform = Players[_nowTurn].transform;//今のプレイヤーの位置保存
                 bool nowMoobing = true;//今動いてるか
 
                 //0.8秒でプレイヤーを次のマスへ移動させる
                 while(_movePresent < 0.8f)
                 {
                     _movePresent += Time.deltaTime;
-                    _players[_nowTurn].transform.position = Vector3.Slerp(nowPlayerTransform.position,_spaces[_playerPositions[_nowTurn]].position,_movePresent);
+                    Players[_nowTurn].transform.position = Vector3.Slerp(nowPlayerTransform.position,_spaces[_playerPositions[_nowTurn]].position,_movePresent);
                     yield return null;//whileは1フレームの中で処理を行うためこれで1フレーム進めさせる
                 }
                 //パーセントをリセットしてプレイヤーが同じマスにいる時の処理
@@ -143,14 +137,14 @@ public class MapManager : MonoBehaviour
                 _playerPositions[_nowTurn]--;
                 _playerMoveSpaceCountText.text = moveSpaceCount.ToString();
 
-                Transform nowPlayerTransform = _players[_nowTurn].transform;//今のプレイヤーの位置保存
+                Transform nowPlayerTransform = Players[_nowTurn].transform;//今のプレイヤーの位置保存
                 bool nowMoobing = true;//今動いてるか
 
                 //0.8秒でプレイヤーを次のマスへ移動させる
                 while(_movePresent < 0.8f )
                 {
                     _movePresent += Time.deltaTime;
-                    _players[_nowTurn].transform.position = Vector3.Slerp(nowPlayerTransform.position,_spaces[_playerPositions[_nowTurn]].position,_movePresent);
+                    Players[_nowTurn].transform.position = Vector3.Slerp(nowPlayerTransform.position,_spaces[_playerPositions[_nowTurn]].position,_movePresent);
                     yield return null;//whileは1フレームの中で処理を行うためこれで1フレーム進めさせる
                 }
                 //パーセントをリセットしてプレイヤーが同じマスにいる時の処理
@@ -178,8 +172,8 @@ public class MapManager : MonoBehaviour
         if(_playerPositions[0] == _playerPositions[1])
         {
             //位置をずらす
-            _players[0].transform.position -= new Vector3(_offset,0f,0f);
-            _players[1].transform.position += new Vector3(_offset,0f,0f);
+            Players[0].transform.position -= new Vector3(_offset,0f,0f);
+            Players[1].transform.position += new Vector3(_offset,0f,0f);
 
             _doDefaultPosition = false;
         }
@@ -190,10 +184,10 @@ public class MapManager : MonoBehaviour
             switch (_nowTurn)
             {
                 case 0:
-                    _players[1].transform.position -= new Vector3(_offset,0f,0f);
+                    Players[1].transform.position -= new Vector3(_offset,0f,0f);
                     break;
                 case 1:
-                    _players[0].transform.position += new Vector3(_offset,0f,0f);
+                    Players[0].transform.position += new Vector3(_offset,0f,0f);
                     break;                                      
             }
             
