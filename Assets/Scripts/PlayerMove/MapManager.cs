@@ -58,6 +58,15 @@ public class MapManager : MonoBehaviour
         SameSpace();
     }
 
+    /*void Update()
+    {
+        //テスト用
+       if (!Processing)
+        {
+            StartCoroutine(MovePlayer(5));
+        }
+    }*/
+
     //ダイスが振られたら(ダイスの目)
     public IEnumerator MovePlayer(int moveSpaceCount)
     {
@@ -210,7 +219,7 @@ public class MapManager : MonoBehaviour
             case 12:
             case 20:
                 _turnManager.TurnChange();
-                Debug.Log("次ターン確定でハイリスクになるマス");
+                Debug.Log("次ターン確定でハイリスクのサイコロになるマス");
                 _playermanager[_nowTurn].thisEvent = PlayerManager.Event.sixDice;
                 break;
             //次ターンから1の目を出すまでターンが回ってこないイベントマスに止まったら

@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TitleStart : MonoBehaviour
 {
     //タイトルマネージャーから変数プレイヤーデータマネージャーを持ってくる
     public TitleManager[] PlayerDataManagers;
+    [SerializeField] private Button startButton;
 
     // Start is called before the first frame update
     void Start()
     {
+    EventSystem.current.SetSelectedGameObject(startButton.gameObject);
      PlayerDataManagers[0].PlayerDevice = null; //初期化
      PlayerDataManagers[1].PlayerDevice = null;
      JoinDevices();
-     ChangeScene();
-
     }
 
     // Update is called once per frame
@@ -53,7 +55,7 @@ public class TitleStart : MonoBehaviour
             //Debug.Log(playerCount);
         }*/
     }
-     void ChangeScene()
+    public void ChangeScene()
     {
         SceneManager.LoadScene("MainGame");
     }
