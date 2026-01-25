@@ -29,11 +29,8 @@ public class Dice : MonoBehaviour
     private bool isRolling = false; 
 
     [SerializeField] TurnManager turnManager; // インスペクターでTurnManagerをセット
-    [SerializeField] private Button startButton;
-    public void Start()
-    {
-        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
-    }
+    [SerializeField] MapManager mapManager;
+
     public void OnnomaleButtonClick()
     {
         OnDice();
@@ -41,6 +38,8 @@ public class Dice : MonoBehaviour
         {
             turnManager.DiceMenu.SetActive(false);
         }
+
+        mapManager.PlayerManager[turnManager.NowTurn].thisBeforeDice = PlayerManager.BeforeDice.NormalDice;
     }
     public void OnsixDiceButtonClick()
     {
@@ -49,14 +48,15 @@ public class Dice : MonoBehaviour
         {
             turnManager.DiceMenu.SetActive(false);
         }
+
+        mapManager.PlayerManager[turnManager.NowTurn].thisBeforeDice = PlayerManager.BeforeDice.HighRisk;
     }
 
     // ==========================================
     // 普通のサイコロ (1〜6)
     // ==========================================
-    public void OnDice(PlayerManager.Event thisEvent = default)
+    public void OnDice()
     {
-        MapManager mapManager = FindObjectOfType<MapManager>();
         if (turnManager.hasRolled || isRolling || mapManager.Processing) return;
 
         turnManager.hasRolled = true; // 振ったことにする
@@ -64,10 +64,10 @@ public class Dice : MonoBehaviour
         int resultIndex = UnityEngine.Random.Range(0, 6); // 0~5のインデックス
         Sprite finalSprite = normalResultSprites[resultIndex];
         
-        StartCoroutine(NormalShuffleRoutine(finalSprite, resultIndex + 1, thisEvent));
+        StartCoroutine(NormalShuffleRoutine(finalSprite, resultIndex + 1));
     }
 
-    IEnumerator NormalShuffleRoutine(Sprite finalSprite, int value, PlayerManager.Event thisEvent)
+    IEnumerator NormalShuffleRoutine(Sprite finalSprite, int value)
     {
         isRolling = true;
         float elapsed = 0f;
@@ -81,10 +81,9 @@ public class Dice : MonoBehaviour
         }
 
         targetSpriteRenderer.sprite = finalSprite;
-        MapManager mapManager = FindObjectOfType<MapManager>();
 
         //もし"1以外だと動けないイベント"中で1以外を出したら
-        if(thisEvent == PlayerManager.Event.stopDice && value != 1)
+        if(mapManager.PlayerManager[turnManager.NowTurn].thisEvent == PlayerManager.Event.stopDice && value != 1)
         {
             Invoke("TurnChange",1f);//1秒後にターンチェンジ
         }
@@ -106,7 +105,7 @@ public class Dice : MonoBehaviour
     // ==========================================
     // ハイリスクサイコロ (-1, -2, -4, 3, 6)
     // ==========================================
-    public void OnSixDice(PlayerManager.Event thisEvent = default)
+    public void OnSixDice()
     {
         if (turnManager.hasRolled || isRolling) return;
         turnManager.hasRolled = true; // 振ったことにする
@@ -140,7 +139,6 @@ public class Dice : MonoBehaviour
         }
 
         targetSpriteRenderer.sprite = finalSprite;
-        MapManager mapManager = FindObjectOfType<MapManager>();
         StartCoroutine(mapManager.MovePlayer(value));
         Debug.Log($"ハイリスク確定: {value}");
         isRolling = false;

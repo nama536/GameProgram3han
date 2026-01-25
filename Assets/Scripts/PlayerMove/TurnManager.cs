@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
-    public enum Turn
-    {
-        PlayerOne,
-        PlayerTwo
-    }
-    //今がどちらのターンなのか
-    public Turn NowTurn;
+    //今がどちらのターンなのか　０がプレイヤー１　１がプレイヤー２
+    public int NowTurn = 0;
     public GameObject DiceMenu;
+    //０がノーマル１がハイリスク
+    [SerializeField] Button[] _diceSelect;
 
     [SerializeField] TextMeshProUGUI _turnText;
     [SerializeField] PlayerInput _uiAction;
@@ -35,6 +33,8 @@ public class TurnManager : MonoBehaviour
         //プレイヤー１のコントローラーにする
         _uiAction.SwitchCurrentControlScheme(_gamepads[0]);
         _uiAction.actions.devices = new InputDevice[] { _gamepads[0] };
+
+        EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
     }
     public void TurnChange()
     {
@@ -43,23 +43,58 @@ public class TurnManager : MonoBehaviour
         //今と逆のプレイヤーにターンを変更
         switch (NowTurn)
         {  
-            case Turn.PlayerOne:
-                NowTurn = Turn.PlayerTwo;
+            case 0:
+                NowTurn = 1;
                 _turnText.text = "プレイヤー２のターン";
                 _turnText.color = Color.blue;
                 _uiAction.actions.devices = new InputDevice[] { _gamepads[1] };
                 break;
-            case Turn.PlayerTwo:
-                NowTurn = Turn.PlayerOne;
+            case 1:
+                NowTurn = 0;
                 _turnText.text = "プレイヤー１のターン";
                 _turnText.color = Color.black;
                 _uiAction.actions.devices = new InputDevice[] { _gamepads[0] };
                 break;
         }
         DiceMenu.SetActive(true); 
-
+        EventCheck();
         _mapManager.Processing = false;//テスト用
-        GameObject firstButton = DiceMenu.GetComponentInChildren<Button>().gameObject;
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(firstButton);
+    }
+
+    void EventCheck()
+    {
+        switch (_mapManager.PlayerManager[NowTurn].thisEvent)
+        {
+            case PlayerManager.Event.normalDice:
+                EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
+                _diceSelect[0].interactable = true;
+                _diceSelect[1].interactable = true;
+                break;
+            case PlayerManager.Event.stopDice:
+                _diceSelect[0].interactable = true;
+                EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
+                _diceSelect[1].interactable = false;
+                break;
+            case PlayerManager.Event.sixDice:
+                _diceSelect[1].interactable = true;
+                EventSystem.current.SetSelectedGameObject(_diceSelect[1].gameObject);
+                _diceSelect[0].interactable = false;
+                break;
+            case PlayerManager.Event.beforeDice:
+                switch (_mapManager.PlayerManager[NowTurn].thisBeforeDice)
+                {
+                    case PlayerManager.BeforeDice.NormalDice:
+                        _diceSelect[0].interactable = true;
+                        EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
+                        _diceSelect[1].interactable = false;
+                        break;
+                    case PlayerManager.BeforeDice.HighRisk:
+                        _diceSelect[1].interactable = true;
+                        EventSystem.current.SetSelectedGameObject(_diceSelect[1].gameObject);
+                        _diceSelect[0].interactable = false;
+                        break;
+                }
+                break;
+        }
     }
 }

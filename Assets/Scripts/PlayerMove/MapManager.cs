@@ -26,14 +26,14 @@ public class MapManager : MonoBehaviour
     [SerializeField] Transform[] _spaces;
 
     //ターンが今どちらか 0がプレイヤー1　1がプレイヤー2
-    int _nowTurn;
+    private int _nowTurn;
     //処理中かどうか
     public bool Processing = false;
     public TitleManager[] PlayerDataManagers;
 
     [SerializeField] TurnManager _turnManager;
     [SerializeField] ResultManager _resultManager;
-    private PlayerManager[] _playermanager = new PlayerManager[2];
+    public PlayerManager[] PlayerManager = new PlayerManager[2];
     
 
     void Start()
@@ -42,14 +42,14 @@ public class MapManager : MonoBehaviour
         //Players[0] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[0].PlayerDevice);
         //Players[0].gameObject.transform.position = _spaces[0].position;
         Players[0] = Instantiate(_player,_spaces[0].transform.position,Quaternion.identity);
-        _playermanager[0] = Players[0].GetComponent<PlayerManager>();
-        _playermanager[0].thisPlayerCount = PlayerManager.PlayerCount.PlayerOne;
+        PlayerManager[0] = Players[0].GetComponent<PlayerManager>();
+        PlayerManager[0].thisPlayerCount = global::PlayerManager.PlayerCount.PlayerOne;
 
         //Players[1] = PlayerInput.Instantiate(_player,pairWithDevice:PlayerDataManagers[1].PlayerDevice);
         //Players[1].gameObject.transform.position = _spaces[0].position;
         Players[1] = Instantiate(_player,_spaces[0].transform.position,Quaternion.identity);
-        _playermanager[1] = Players[1].GetComponent<PlayerManager>();
-        _playermanager[1].thisPlayerCount = PlayerManager.PlayerCount.PlayerTwo;
+        PlayerManager[1] = Players[1].GetComponent<PlayerManager>();
+        PlayerManager[1].thisPlayerCount = global::PlayerManager.PlayerCount.PlayerTwo;
 
 
         //プレイヤーの見た目変更
@@ -67,16 +67,7 @@ public class MapManager : MonoBehaviour
         //処理中
         Processing = true;
 
-        switch (_turnManager.NowTurn)
-        {
-            case TurnManager.Turn.PlayerOne:
-                _nowTurn = 0;
-                break;
-
-            case TurnManager.Turn.PlayerTwo:
-                _nowTurn = 1;
-                break;
-        }
+        _nowTurn = _turnManager.NowTurn;
 
         //プレイヤーが動いてる時に上に出るあと何マス進むかのテキストを表示
         _playerMoveSpaceCountText.enabled = true;
@@ -214,19 +205,19 @@ public class MapManager : MonoBehaviour
             case 20:
                 _turnManager.TurnChange();
                 Debug.Log("次ターン確定でハイリスクのサイコロになるマス");
-                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.sixDice;
+                PlayerManager[_nowTurn].thisEvent = global::PlayerManager.Event.sixDice;
                 break;
             //次ターンから1の目を出すまでターンが回ってこないイベントマスに止まったら
             case 15:
                 _turnManager.TurnChange();
                 Debug.Log("次ターンから1の目を出すまでターンが回ってこないマス");
-                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.stopDice;
+                PlayerManager[_nowTurn].thisEvent = global::PlayerManager.Event.stopDice;
                 break;
             //次ターン hitotumaenosaikoronikotei
             case 19:
                 _turnManager.TurnChange();
                 Debug.Log("次一つ前のサイコロに固定");
-                _playermanager[_nowTurn].thisEvent = PlayerManager.Event.beforeDice;
+                PlayerManager[_nowTurn].thisEvent = global::PlayerManager.Event.beforeDice;
                 break;
             //ゴールマスに止まったら
             case 30:
@@ -236,7 +227,7 @@ public class MapManager : MonoBehaviour
             //その他通常マスに止まったら
             default:
                 _turnManager.TurnChange();
-                 _playermanager[_nowTurn].thisEvent = PlayerManager.Event.normalDice;
+                PlayerManager[_nowTurn].thisEvent = global::PlayerManager.Event.normalDice;
                 break;
         }
     }

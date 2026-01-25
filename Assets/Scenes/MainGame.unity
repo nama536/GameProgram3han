@@ -1332,6 +1332,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NowTurn: 0
   DiceMenu: {fileID: 882464451}
+  _diceSelect:
+  - {fileID: 315428653}
+  - {fileID: 1301007518}
   _turnText: {fileID: 945622969}
   _uiAction: {fileID: 1005517462}
   _mapManager: {fileID: 1005517458}
@@ -1388,12 +1391,16 @@ MonoBehaviour:
   - {fileID: 1804458644}
   - {fileID: 167121118}
   - {fileID: 2012184556}
+  NowTurn: 0
   Processing: 0
   PlayerDataManagers:
   - {fileID: 11400000, guid: bfaae34b2505f4933925958e9b937ec4, type: 2}
   - {fileID: 11400000, guid: ef46e72331b4e4d2b907f0334870b95a, type: 2}
   _turnManager: {fileID: 1005517456}
   _resultManager: {fileID: 1005517460}
+  PlayerManager:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1005517459
 Transform:
   m_ObjectHideFlags: 0
@@ -1468,7 +1475,7 @@ MonoBehaviour:
   shuffleDuration: 1
   shuffleInterval: 0.1
   turnManager: {fileID: 1005517456}
-  startButton: {fileID: 315428653}
+  mapManager: {fileID: 1005517458}
 --- !u!114 &1005517462
 MonoBehaviour:
   m_ObjectHideFlags: 0

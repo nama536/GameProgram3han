@@ -21,10 +21,17 @@ public class PlayerManager : MonoBehaviour
     }
     public PlayerCount thisPlayerCount;
 
+    public enum BeforeDice
+    {
+        NormalDice,
+        HighRisk
+    }
+    public BeforeDice thisBeforeDice;
+
     private TurnManager turnManager; 
     private Dice diceManager;
 
-    void Start()
+    /*void Start()
     {
         diceManager = FindFirstObjectByType<Dice>();
         turnManager = FindFirstObjectByType<TurnManager>();
@@ -51,5 +58,5 @@ public class PlayerManager : MonoBehaviour
         {
             diceManager.OnSixDice(thisEvent);
         }
-    }
+    }*/
 }
