@@ -464,7 +464,7 @@ MonoBehaviour:
   m_MoveAction: {fileID: 407805443618210056, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
   m_SubmitAction: {fileID: -2457950987993357874, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
   m_CancelAction: {fileID: 3264478637688416048, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
-  m_LeftClickAction: {fileID: 4967850701427359361, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
+  m_LeftClickAction: {fileID: 0}
   m_MiddleClickAction: {fileID: 8142879853651128692, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
   m_RightClickAction: {fileID: 8176652307658793730, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
   m_ScrollWheelAction: {fileID: 3580167692402228688, guid: 29e19c17d7a294ffeab4fd355043eed5, type: 3}
@@ -1496,7 +1496,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: UI
+  m_DefaultActionMap: Select
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1087219027

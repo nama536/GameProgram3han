@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
@@ -21,14 +19,22 @@ public class TurnManager : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _turnText;
     [SerializeField] PlayerInput _uiAction;
+    private InputDevice[] _gamepads = new InputDevice[2];
 
     [SerializeField] MapManager _mapManager;
     public bool hasRolled = false;
 
     void Start()
     {
+        //初期設定
         _uiAction.neverAutoSwitchControlSchemes = true;
-        _uiAction.SwitchCurrentControlScheme(_mapManager.PlayerDataManagers[0].PlayerDevice);
+        _uiAction.SwitchCurrentActionMap("Select");
+        //コントローラーの情報保存
+        _gamepads[0] = _mapManager.PlayerDataManagers[0].PlayerDevice;
+        _gamepads[1] = _mapManager.PlayerDataManagers[1].PlayerDevice;
+        //プレイヤー１のコントローラーにする
+        _uiAction.SwitchCurrentControlScheme(_gamepads[0]);
+        _uiAction.actions.devices = new InputDevice[] { _gamepads[0] };
     }
     public void TurnChange()
     {
@@ -41,13 +47,13 @@ public class TurnManager : MonoBehaviour
                 NowTurn = Turn.PlayerTwo;
                 _turnText.text = "プレイヤー２のターン";
                 _turnText.color = Color.blue;
-                _uiAction.SwitchCurrentControlScheme(_mapManager.PlayerDataManagers[1].PlayerDevice);
+                _uiAction.actions.devices = new InputDevice[] { _gamepads[1] };
                 break;
             case Turn.PlayerTwo:
                 NowTurn = Turn.PlayerOne;
                 _turnText.text = "プレイヤー１のターン";
                 _turnText.color = Color.black;
-                _uiAction.SwitchCurrentControlScheme(_mapManager.PlayerDataManagers[0].PlayerDevice);
+                _uiAction.actions.devices = new InputDevice[] { _gamepads[0] };
                 break;
         }
         DiceMenu.SetActive(true); 
