@@ -16,6 +16,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] Button[] _diceSelect;
 
     [SerializeField] TextMeshProUGUI _turnText;
+    [SerializeField] TextMeshProUGUI _eventText;
     [SerializeField] PlayerInput _uiAction;
     private InputDevice[] _gamepads = new InputDevice[2];
 
@@ -47,12 +48,14 @@ public class TurnManager : MonoBehaviour
                 NowTurn = 1;
                 _turnText.text = "プレイヤー２のターン";
                 _turnText.color = Color.blue;
+                _eventText.color = Color.blue;
                 _uiAction.actions.devices = new InputDevice[] { _gamepads[1] };
                 break;
             case 1:
                 NowTurn = 0;
                 _turnText.text = "プレイヤー１のターン";
                 _turnText.color = Color.black;
+                _eventText.color = Color.black;
                 _uiAction.actions.devices = new InputDevice[] { _gamepads[0] };
                 break;
         }
@@ -69,16 +72,19 @@ public class TurnManager : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
                 _diceSelect[0].interactable = true;
                 _diceSelect[1].interactable = true;
+                _eventText.text = "通常マス";
                 break;
             case PlayerManager.Event.stopDice:
                 _diceSelect[0].interactable = true;
                 EventSystem.current.SetSelectedGameObject(_diceSelect[0].gameObject);
                 _diceSelect[1].interactable = false;
+                _eventText.text = "１が出るまで進めないマス";
                 break;
             case PlayerManager.Event.sixDice:
                 _diceSelect[1].interactable = true;
                 EventSystem.current.SetSelectedGameObject(_diceSelect[1].gameObject);
                 _diceSelect[0].interactable = false;
+                _eventText.text = "ハイリスクサイコロマス";
                 break;
             case PlayerManager.Event.beforeDice:
                 switch (_mapManager.PlayerManager[NowTurn].thisBeforeDice)
@@ -94,6 +100,7 @@ public class TurnManager : MonoBehaviour
                         _diceSelect[0].interactable = false;
                         break;
                 }
+                _eventText.text = "前ターンのサイコロマス";
                 break;
         }
     }
